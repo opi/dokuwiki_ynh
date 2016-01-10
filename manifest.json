@@ -1,6 +1,6 @@
 {
     "name": "Dokuwiki",
-    "id": "dokuwiki",
+    "id": "dokuwiki_new",
     "description": {
         "en": "DokuWiki is a simple to use and highly versatile Open Source wiki software that doesn't require a database.",
         "fr": "DokuWiki est un wiki Open Source simple à utiliser et très polyvalent qui n'exige aucune base de données.",
@@ -10,8 +10,8 @@
     },
     "url": "https://www.dokuwiki.org",
     "maintainer": {
-        "name": "opi",
-        "email": "opi@zeropi.net"
+        "name": "phiwui",
+        "email": "onesmalllebowsky@yahoo.fr"
     },
     "multi_instance": "false",
     "services": [
