@@ -49,13 +49,13 @@ sudo cp ../conf/dokuwiki.php $final_path/conf
 sudo cp ../conf/acl.auth.php $final_path/conf
 
 # Files owned by root, www-data can just read
-sudo find $final_path -type f | xargs sudo chmod 0644
-sudo find $final_path -type d | xargs sudo chmod 0755
+sudo find $final_path -type f -print0 | xargs -0 sudo chmod 0644
+sudo find $final_path -type d -print0 | xargs -0 sudo chmod 0755
 sudo chown -R root: $final_path
 
 # except for conf, data, some data subfolders, and lib/plugin, where www-data must have write permissions
 sudo chown -R www-data:root $final_path/{conf,data,data/attic,data/cache,data/index,data/locks,data/media*,data/meta,data/pages,data/tmp,lib/plugins}
-sudo chmod -R 700 $final_path/{conf,data,data/attic,data/cache,data/index,data/locks,data/media*,data/meta,data/pages,data/tmp,lib/plugins}
+sudo chmod -R 700           $final_path/{conf,data,data/attic,data/cache,data/index,data/locks,data/media*,data/meta,data/pages,data/tmp,lib/plugins}
 
 # Modify Nginx configuration file and copy it to Nginx conf directory
 sed -i "s@YNH_WWW_LOCATION@$location@g" ../conf/nginx.conf
