@@ -55,7 +55,7 @@ sudo chown -R root: $final_path
 
 # except for conf, data, some data subfolders, and lib/plugin, where www-data must have write permissions
 sudo chown -R www-data:root $final_path/{conf,data,data/attic,data/cache,data/index,data/locks,data/media*,data/meta,data/pages,data/tmp,lib/plugins}
-sudo chmod -R 700           $final_path/{conf,data,data/attic,data/cache,data/index,data/locks,data/media*,data/meta,data/pages,data/tmp,lib/plugins}
+sudo chmod -R 700 $final_path/{conf,data,data/attic,data/cache,data/index,data/locks,data/media*,data/meta,data/pages,data/tmp,lib/plugins}
 
 # Modify Nginx configuration file and copy it to Nginx conf directory
 sed -i "s@YNH_WWW_LOCATION@$location@g" ../conf/nginx.conf
