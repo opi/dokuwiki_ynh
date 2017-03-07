@@ -17,11 +17,6 @@ set -eu
 
 source .fonctions	# Charge les fonctions génériques habituellement utilisées dans le script
 
-CLEAN_SETUP () {
-# Nettoyage des résidus d'installation non pris en charge par le script remove.
-	# Clean hosts
-	sudo sed -i '/#DOKUWIKI/d' /etc/hosts
-}
 TRAP_ON	# Active trap pour arrêter le script si une erreur est détectée.
 
 domain=$YNH_APP_ARG_DOMAIN
@@ -95,6 +90,3 @@ then
 	ynh_app_setting_delete $app unprotected_uris
 	sudo yunohost app ssowatconf
 fi
-
-# Nettoyer hosts
-sudo sed -i '/#DOKUWIKI/d' /etc/hosts
