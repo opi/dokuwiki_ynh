@@ -16,6 +16,8 @@ set -eu
 # Retrieve arguments
 
 source .fonctions	# Loads the generic functions usually used in the script
+# Source app helpers
+source /usr/share/yunohost/helpers
 
 TRAP_ON	# Active trap for strop script if detect error.
 
@@ -25,9 +27,6 @@ admin=$YNH_APP_ARG_ADMIN
 is_public=$YNH_APP_ARG_IS_PUBLIC
 
 app=$YNH_APP_INSTANCE_NAME
-
-# Source app helpers
-source /usr/share/yunohost/helpers
 
 CHECK_VAR "$app" "app name not set"
 
