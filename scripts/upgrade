@@ -3,6 +3,9 @@
 # causes the shell to exit if any subcommand or pipeline returns a non-zero status
 set -e
 
+# Source app helpers
+source /usr/share/yunohost/helpers
+
 # This is a multi-instance app, meaning it can be installed several times independently
 # The id of the app as stated in the manifest is available as $YNH_APP_ID
 # The instance number is available as $YNH_APP_INSTANCE_NUMBER (equals "1", "2", ...)
@@ -16,10 +19,10 @@ set -e
 app=$YNH_APP_INSTANCE_NAME
 
 # Retrieve app settings
-domain=$(sudo ynh_app_setting_get $app domain)
-path=$(sudo ynh_app_setting_get $app path)
-admin=$(sudo ynh_app_setting_get $app admin)
-is_public=$(sudo ynh_app_setting_get $app is_public)
+domain=$(ynh_app_setting_get $app domain)
+path=$(ynh_app_setting_get $app path)
+admin=$(ynh_app_setting_get $app admin)
+is_public=$(ynh_app_setting_get $app is_public)
 
 # Remove trailing slash to path
 path=${path%/}
