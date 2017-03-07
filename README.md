@@ -22,7 +22,7 @@ Source: [dokuwiki.org](https://www.dokuwiki.org/)
 
 ## Versionning
 
-### Version 1.0.1 (07/03/17)
+### Version 1.1.0 (07/03/17)
 
 - Update app
 
