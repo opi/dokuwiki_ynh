@@ -1,32 +1,28 @@
 #!/bin/bash
 
-# causes the shell to exit if any subcommand or pipeline returns a non-zero status
-set -e
+# Exit on command errors and treat unset variables as an error
+set -eu
 
-# Source YNH helpers
-. /usr/share/yunohost/helpers
+# The parameter $1 is the backup directory location dedicated to the app
+backup_dir=$1
 
-# This is a multi-instance app, meaning it can be installed several times independently
-# The id of the app as stated in the manifest is available as $YNH_APP_ID
-# The instance number is available as $YNH_APP_INSTANCE_NUMBER (equals "1", "2", ...)
-# The app instance name is available as $YNH_APP_INSTANCE_NAME
-#    - the first time the app is installed, YNH_APP_INSTANCE_NAME = ynhexample
-#    - the second time the app is installed, YNH_APP_INSTANCE_NAME = ynhexample__2
-#    - ynhexample__{N} for the subsequent installations, with N=3,4, ...
-# The app instance name is probably what you are interested the most, since this is
-# guaranteed to be unique. This is a good unique identifier to define installation path,
-# db names, ...
-app=$YNH_APP_INSTANCE_NAME
+# The parameter $2 is theid of the app instance
+app=$2
 
-# Retrieve arguments
-domain=$(sudo yunohost app setting $app domain)
+# Source app helpers
+source /usr/share/yunohost/helpers
 
-# Backup directory location for the app from where the script is executed and 
-# which will be compressed afterward
-backup_dir=$YNH_APP_BACKUP_DIR
+domain=$(ynh_app_setting_get $app domain)
+final_path=$(ynh_app_setting_get $app final_path)
 
-# Backup sources & data
-ynh_backup "/var/www/$app" "./sources"
+# Copy the app files
+sudo mkdir -p ${backup_dir}/var/www
+sudo cp -a $final_path "${backup_dir}/var/www/$app"
 
-# Copy Nginx conf
-ynh_backup "/etc/nginx/conf.d/$domain.d/$app.conf" "./conf/nginx.conf"
+# Copy the conf files
+sudo mkdir -p "${backup_dir}/conf"
+sudo cp -a /etc/nginx/conf.d/$domain.d/$app.conf "${backup_dir}/conf/nginx.conf"
+
+# Copy dedicated php-fpm process to backup folder
+sudo cp -a /etc/php5/fpm/pool.d/$app.conf "${backup_dir}/conf/php-fpm.conf"
+sudo cp -a /etc/php5/fpm/conf.d/20-$app.ini "${backup_dir}/conf/php-fpm.ini"

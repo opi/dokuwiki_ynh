@@ -16,10 +16,10 @@ set -e
 app=$YNH_APP_INSTANCE_NAME
 
 # Retrieve app settings
-domain=$(sudo yunohost app setting $app domain)
-path=$(sudo yunohost app setting $app path)
-admin=$(sudo yunohost app setting $app admin)
-is_public=$(sudo yunohost app setting $app is_public)
+domain=$(sudo ynh_app_setting_get $app domain)
+path=$(sudo ynh_app_setting_get $app path)
+admin=$(sudo ynh_app_setting_get $app admin)
+is_public=$(sudo ynh_app_setting_get $app is_public)
 
 # Remove trailing slash to path
 path=${path%/}
@@ -30,7 +30,7 @@ location=${path:-/}
 if [ -z "$admin" ];
 then
     admin=$(sudo yunohost user list | grep 'username' -m1 | awk '{print $2}')
-    sudo yunohost app setting $app is_public -v "$is_public"
+    sudo ynh_app_setting_set $app is_public -v "$is_public"
 fi
 
 
@@ -73,8 +73,8 @@ sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/$app.conf
 
 if [ "$is_public" = "Yes" ];
 then
-  sudo yunohost app setting $app skipped_uris -d
-  sudo yunohost app setting $app unprotected_uris -v "/"
+  sudo ynh_app_setting_set $app skipped_uris -d
+  sudo ynh_app_setting_set $app unprotected_uris -v "/"
 fi
 
 sudo service nginx reload
