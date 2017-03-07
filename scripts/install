@@ -15,9 +15,9 @@ set -eu
 # db names, ...
 # Retrieve arguments
 
-source .fonctions	# Charge les fonctions génériques habituellement utilisées dans le script
+source .fonctions	# Loads the generic functions usually used in the script
 
-TRAP_ON	# Active trap pour arrêter le script si une erreur est détectée.
+TRAP_ON	# Active trap for strop script if detect error.
 
 domain=$YNH_APP_ARG_DOMAIN
 path=$YNH_APP_ARG_PATH
@@ -74,10 +74,10 @@ sudo sed -i "s@__NAMETOCHANGE__@$app@g" /etc/nginx/conf.d/$domain.d/$app.conf
 
 POOL_FPM
 
-# Donne un accès public pour curl
+# Public access for curl
 ynh_app_setting_set $app unprotected_uris "/"
 
-# Régénère la configuration de SSOwat
+# Relaod SSOwat configuration
 sudo yunohost app ssowatconf
 
 # Reload Nginx and regenerate SSOwat conf
@@ -86,7 +86,7 @@ sudo service nginx reload
 
 if [ "$is_public" = "No" ];
 then
-	# Retire l'accès public
+	# Exit public access
 	ynh_app_setting_delete $app unprotected_uris
 	sudo yunohost app ssowatconf
 fi

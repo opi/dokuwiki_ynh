@@ -36,7 +36,7 @@ sudo service nginx reload
 sudo cp -a "${backup_dir}/var/www/$app" $final_path
 
 # Set permissions
-# Les fichiers appartiennent à www-data, pour permettre les mises à jour.
+# The files belong to www-data, to allow for updates.
 sudo chown -R www-data: $final_path
 
 # Copy dedicated php-fpm process from backup folder to the right location
