@@ -8,7 +8,7 @@ set -eu
 backup_dir=$1
 
 # The parameter $2 is the id of the app instance ex: ynhexample__2
-app=$2
+app=$YNH_APP_INSTANCE_NAME
 
 # Source app helpers
 source /usr/share/yunohost/helpers
