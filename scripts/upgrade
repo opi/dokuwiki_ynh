@@ -60,8 +60,8 @@ sudo touch $final_path/doku.php
 grep -Ev '^($|#)' ../sources/data/deleted.files | xargs -I {} sudo rm -vrf $final_path/{}
 
 # Files owned by root, www-data can just read
-sudo find $final_path -type f -print0 | sudo xargs -0 chmod 0644
-sudo find $final_path -type d -print0 | sudo xargs -0 chmod 0755
+find $final_path -type f -print0 | sudo xargs -0 chmod 0644
+find $final_path -type d -print0 | sudo xargs -0 chmod 0755
 sudo chown -R root: $final_path
 
 # except for conf, data, some data subfolders, and lib/plugin, where www-data must have write permissions
