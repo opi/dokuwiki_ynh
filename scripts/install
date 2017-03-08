@@ -57,8 +57,8 @@ sudo cp ../conf/dokuwiki.php $final_path/conf
 sudo cp ../conf/acl.auth.php $final_path/conf
 
 # Files owned by www-data can just read
-sudo find $final_path -type f -print0 | xargs -0 chmod 0644
-sudo find $final_path -type d -print0 | xargs -0 chmod 0755
+sudo find $final_path -type f -print0 | xargs sudo chmod 0644
+sudo find $final_path -type d -print0 | xargs sudo chmod 0755
 sudo chown -R www-data: $final_path
 
 # except for conf, data, some data subfolders, and lib/plugin, where www-data must have write permissions
