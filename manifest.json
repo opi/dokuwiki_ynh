@@ -18,7 +18,7 @@
         "name": "opi",
         "email": "opi@zeropi.net"
     },
-    "multi_instance": "true",
+    "multi_instance": true,
     "services": [
         "nginx",
         "php5-fpm"
