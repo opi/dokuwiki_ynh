@@ -19,10 +19,6 @@ is_public=$(ynh_app_setting_get $app is_public)
 sudo yunohost app checkurl "${domain}${path}" -a "$app" \
     || ynh_die "Path not available: ${domain}${path}"
 
-# Restore sources & data
-final_path="/var/www/${app}"
-sudo cp -a ./sources "$final_path"
-
 # Check configuration files php-fpm
 nginx_conf="/etc/nginx/conf.d/${domain}.d/${app}.conf"
 [[ -f $nginx_conf ]] && ynh_die \
@@ -36,6 +32,10 @@ phpfpm_ini="/etc/php5/fpm/conf.d/20-${app}.ini"
 [[ -f $phpfpm_ini ]] && ynh_die \
 "The PHP FPM INI configuration already exists at '${phpfpm_ini}'.
  You should safely delete it before restoring this app."
+
+# Restore sources & data
+final_path="/var/www/${app}"
+sudo cp -a ./sources "$final_path"
 
 # Set permissions
 sudo chown -R www-data: $final_path
