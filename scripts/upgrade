@@ -57,7 +57,9 @@ sudo touch $final_path/doku.php
 
 # Remove deleted files
 # See https://www.dokuwiki.org/install:unused_files
-grep -Ev '^($|#)' ../sources/data/deleted.files | xargs -I {} sudo rm -vrf $final_path/{}
+if [ -f "../sources/data/deleted.files" ]; then
+	grep -Ev '^($|#)' ../sources/data/deleted.files | xargs -I {} sudo rm -vrf $final_path/{}
+fi
 
 # Files owned by www-data can just read
 sudo find $final_path -type f -print0 | xargs -0 sudo chmod 0644
@@ -66,7 +68,10 @@ sudo chown -R www-data: $final_path
 
 # except for conf, data, some data subfolders, and lib/plugin, where www-data must have write permissions
 sudo chown -R www-data:root $final_path/{conf,data,data/attic,data/cache,data/index,data/locks,data/media*,data/meta,data/pages,data/tmp,lib/plugins,lib/tpl}
-sudo chmod -R 700 $final_path/{conf,data,lib/plugins,lib/tpl}
+sudo chmod -R 700 $final_path/{conf}
+sudo chmod -R 700 $final_path/{data}
+sudo chmod -R 700 $final_path/{lib/plugins}
+sudo chmod -R 700 $final_path/{lib/tpl}
 
 # Modify Nginx configuration file and copy it to Nginx conf directory
 sed -i "s@__PATHTOCHANGE__@$path@g"  ../conf/nginx.conf
