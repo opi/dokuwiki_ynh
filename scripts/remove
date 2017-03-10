@@ -3,22 +3,21 @@
 # Exit on command errors and treat unset variables as an error
 set -u
 
-source .fonctions	# Loads the generic functions usually used in the script
+# Get multi-instances specific variables
+app=$YNH_APP_INSTANCE_NAME
 
 # Source app helpers
-source /usr/share/yunohost/helpers
+. /usr/share/yunohost/helpers
 
-# Get application informations.
-app=$YNH_APP_INSTANCE_NAME
-domain=$(ynh_app_setting_get $app domain)
+# Retrieve app settings
+domain=$(ynh_app_setting_get "$app" domain)
 
-SECURE_REMOVE '/var/www/$app'	# Delete directory application
+# Delete app directory and configurations
+sudo rm -rf "/var/www/${app}"
+sudo rm -f "/etc/php5/fpm/pool.d/${app}.conf"
+sudo rm -f "/etc/php5/fpm/conf.d/20-${app}.ini"
+[[ -n $domain ]] && sudo rm -f "/etc/nginx/conf.d/${domain}.d/${app}.conf"
 
-REMOVE_NGINX_CONF	# Delete nginx configuration
-
-REMOVE_FPM_CONF	# Delete pool php-fpm configuration
-
-# Reload SSOwat configuration
-sudo yunohost app ssowatconf
-
-echo -e "\e[0m"	# Restore normal color
+# Reload services
+sudo service php5-fpm restart || true
+sudo service nginx reload || true
