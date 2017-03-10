@@ -42,7 +42,6 @@ if [ -f $phpfpm_ini ]; then
 fi
 
 # Restore sources & data
-final_path="/var/www/${app}"
 sudo cp -a ./sources "$final_path"
 
 # Set permissions
