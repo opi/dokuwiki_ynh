@@ -23,6 +23,7 @@ domain=$(ynh_app_setting_get $app domain)
 path=$(ynh_app_setting_get $app path)
 admin=$(ynh_app_setting_get $app admin)
 is_public=$(ynh_app_setting_get $app is_public)
+multisite=$(ynh_app_setting_get $app multisite)
 
 # Remove trailing slash to path
 path=${path%/}
