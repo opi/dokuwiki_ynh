@@ -68,7 +68,10 @@ fi
 sudo chown -R www-data: $final_path
 
 # except for conf, data, some data subfolders, and lib/plugin, where www-data must have write permissions
-sudo chown -R www-data:root $final_path/{conf,data,data/attic,data/cache,data/index,data/locks,data/media*,data/meta,data/pages,data/tmp,lib/plugins,lib/tpl}
+if [ -d "${final_path}/data/media" ]; then
+	sudo chown -R www-data:root $final_path/{data/attic,data/cache,data/index,data/locks,data/media*,data/meta,data/pages,data/tmp}
+fi
+sudo chown -R www-data:root $final_path/{conf,data,lib/plugins,lib/tpl}
 sudo chmod -R 700 $final_path/conf
 sudo chmod -R 700 $final_path/data
 sudo chmod -R 700 $final_path/lib/plugins
