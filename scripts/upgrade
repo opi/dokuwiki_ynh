@@ -3,6 +3,7 @@
 # Exit on command errors and treat unset variables as an error
 set -eu
 
+source .fonctions
 # Source app helpers
 source /usr/share/yunohost/helpers
 
@@ -37,14 +38,15 @@ then
     sudo ynh_app_setting_set $app is_public -v "$is_public"
 fi
 
-
 # Modify dokuwiki conf
 sed -i "s@YNH_ADMIN_USER@$admin@g" ../conf/dokuwiki.php
 
 # Copy files to the right place
 final_path=/var/www/$app
 sudo mkdir -p $final_path
-sudo cp -a ../sources/* $final_path
+
+SETUP_SOURCE "dokuwiki-stable.tgz"
+
 sudo cp ../conf/dokuwiki.php $final_path/conf
 
 # Do not override ACL configuration file
