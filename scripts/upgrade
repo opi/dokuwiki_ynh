@@ -64,6 +64,7 @@ if [ -f "../sources/data/deleted.files" ]; then
 	grep -Ev '^($|#)' ../sources/data/deleted.files | xargs -I {} sudo rm -vrf $final_path/{}
 fi
 
+break
 # Update all plugins
 for name_plugin in `sudo -s cat $final_path/lib/plugins/*/plugin.info.txt | grep url | awk -F':' '{print $3}'`;
 do
