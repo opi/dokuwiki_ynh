@@ -46,7 +46,7 @@ final_path=/var/www/$app
 sudo mkdir -p $final_path
 
 # Update all plugins
-for name_plugin in `cat $final_path/lib/plugins/*/plugin.info.txt | grep url | awk -F':' '{print $3}'`;
+for name_plugin in `sudo bash -c "cat $final_path/lib/plugins/*/plugin.info.txt | grep url | awk -F':' '{print $3}'"`;
 do
         wget "https://github.com/splitbrain/dokuwiki-plugin-${name_plugin}/zipball/master" -O "${name_plugin}.zip"
         if [ `ls -l "${name_plugin}.zip" | awk '{print $5}'` -eq 0 ]; then
