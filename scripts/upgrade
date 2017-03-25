@@ -68,7 +68,7 @@ fi
 for name_plugin in `sudo -s cat $final_path/lib/plugins/*/plugin.info.txt | grep url | awk -F':' '{print $3}'`;
 do
 		sudo wget "https://github.com/splitbrain/dokuwiki-plugin-${name_plugin}/zipball/master" -O "${name_plugin}.zip" || true
-		sudo unzip ${name_plugin}.zip "${final_path}/lib/plugins/${name_plugin}/"
+		sudo unzip ${name_plugin} "${final_path}/lib/plugins/${name_plugin}/"
 done
 
 # Files owned by www-data can just read
