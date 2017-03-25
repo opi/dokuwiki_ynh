@@ -73,7 +73,6 @@ do
 		sudo wget -nv "https://github.com/splitbrain/dokuwiki-plugin-${name_plugin}/zipball/master" -O "${name_plugin}.zip" || true
 		if [ -s "${name_plugin}.zip" ]; then
 			sudo unzip ${name_plugin}.zip
-			# sudo chown -R admin: splitbrain-dokuwiki-plugin-${name_plugin}*
 			sudo cp -a splitbrain-dokuwiki-plugin-${name_plugin}*/. "${final_path}/lib/plugins/${name_plugin}/"
 		fi
 done
