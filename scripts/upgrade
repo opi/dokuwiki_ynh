@@ -67,11 +67,9 @@ fi
 # Update all plugins
 for name_plugin in `sudo -s cat $final_path/lib/plugins/*/plugin.info.txt | grep url | awk -F':' '{print $3}'`;
 do
-        wget "https://github.com/splitbrain/dokuwiki-plugin-${name_plugin}/zipball/master" -O "${name_plugin}.zip"
-        if [ `ls -l "${name_plugin}.zip" | awk '{print $5}'` -eq 0 ]; then
-                rm -fr ${name_plugin}.zip
-        else
-                unzip ${name_plugin}.zip "${final_path}/lib/plugins/${name_plugin}/"
+        sudo wget "https://github.com/splitbrain/dokuwiki-plugin-${name_plugin}/zipball/master" -O "${name_plugin}.zip" || true
+        if [ -f "${name_plugin}.zip" ]; then
+                sudo unzip ${name_plugin}.zip "${final_path}/lib/plugins/${name_plugin}/"
         fi
 done
 
