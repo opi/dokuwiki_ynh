@@ -34,8 +34,8 @@ location=${path:-/}
 # admin default value, if not set
 if [ -z "$admin" ];
 then
-    admin=$(sudo yunohost user list | grep 'username' -m1 | awk '{print $2}')
-    sudo ynh_app_setting_set $app is_public -v "$is_public"
+	admin=$(sudo yunohost user list | grep 'username' -m1 | awk '{print $2}')
+	sudo ynh_app_setting_set $app is_public -v "$is_public"
 fi
 
 # Modify dokuwiki conf
@@ -51,7 +51,7 @@ sudo cp ../conf/dokuwiki.php $final_path/conf
 
 # Do not override ACL configuration file
 if [ ! -f "$final_path/conf/acl.auth.php" ]; then
-    sudo cp ../conf/acl.auth.php $final_path/conf
+	sudo cp ../conf/acl.auth.php $final_path/conf
 fi
 
 # Remove upgrade notification
@@ -67,10 +67,8 @@ fi
 # Update all plugins
 for name_plugin in `sudo -s cat $final_path/lib/plugins/*/plugin.info.txt | grep url | awk -F':' '{print $3}'`;
 do
-        sudo wget "https://github.com/splitbrain/dokuwiki-plugin-${name_plugin}/zipball/master" -O "${name_plugin}.zip" || true
-        if [ ! -f "${name_plugin}.zip" ]; then
-                sudo unzip ${name_plugin}.zip "${final_path}/lib/plugins/${name_plugin}/"
-        fi
+		sudo wget "https://github.com/splitbrain/dokuwiki-plugin-${name_plugin}/zipball/master" -O "${name_plugin}.zip" || true
+		sudo unzip ${name_plugin}.zip "${final_path}/lib/plugins/${name_plugin}/"
 done
 
 # Files owned by www-data can just read
