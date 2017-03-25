@@ -64,17 +64,6 @@ if [ -f "../sources/data/deleted.files" ]; then
 	grep -Ev '^($|#)' ../sources/data/deleted.files | xargs -I {} sudo rm -vrf $final_path/{}
 fi
 
-exit 0
-
-# Update all plugins
-for name_plugin in `sudo -s cat $final_path/lib/plugins/*/plugin.info.txt | grep url | awk -F':' '{print $3}'`;
-do
-		sudo wget -nv "https://github.com/splitbrain/dokuwiki-plugin-${name_plugin}/zipball/master" -O "${name_plugin}.zip" || true
-		if [ -s "${name_plugin}.zip" ]; then
-			sudo unzip ${name_plugin}.zip "${final_path}/lib/plugins/${name_plugin}/"
-		fi
-done
-
 # Files owned by www-data can just read
 # sudo find $final_path -type f -print0 | xargs -0 sudo chmod 0644
 # sudo find $final_path -type d -print0 | xargs -0 sudo chmod 0755
@@ -89,6 +78,16 @@ sudo chmod -R 700 $final_path/conf
 sudo chmod -R 700 $final_path/data
 sudo chmod -R 700 $final_path/lib/plugins
 sudo chmod -R 700 $final_path/lib/tpl
+
+# Update all plugins
+for name_plugin in `sudo -s cat $final_path/lib/plugins/*/plugin.info.txt | grep url | awk -F':' '{print $3}'`;
+do
+		sudo wget -nv "https://github.com/splitbrain/dokuwiki-plugin-${name_plugin}/zipball/master" -O "${name_plugin}.zip" || true
+		if [ -s "${name_plugin}.zip" ]; then
+			sudo unzip ${name_plugin}.zip "${final_path}/lib/plugins/${name_plugin}/"
+			sudo chown -R www-data:root "${final_path}/lib/plugins/${name_plugin}/"
+		fi
+done
 
 # Modify Nginx configuration file and copy it to Nginx conf directory
 sudo sed -i "s@__PATHTOCHANGE__@$path@g" /etc/nginx/conf.d/$domain.d/$app.conf
