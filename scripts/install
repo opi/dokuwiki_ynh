@@ -90,8 +90,8 @@ ynh_app_setting_set $app unprotected_uris "/"
 sudo yunohost app ssowatconf
 
 # Reload php5-fpm and Nginx
-sudo service php5-fpm restart || true
-sudo service nginx reload || true
+sudo service php5-fpm restart
+sudo service nginx reload
 
 if [ "$is_public" = "No" ];
 then
