@@ -62,15 +62,6 @@
                 },
                 "choices": ["Yes", "No"],
                 "default": "Yes"
-            },
-            {
-                "name": "multisite",
-                "ask": {
-                    "en": "Enable multisite option ?",
-                    "fr": "Activer l'option multisite ?"
-                },
-                "choices": ["Yes", "No"],
-                "default": "No"
             }
         ]
     }
