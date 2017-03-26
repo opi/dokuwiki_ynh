@@ -45,6 +45,7 @@ sed -i "s@YNH_ADMIN_USER@$admin@g" ../conf/dokuwiki.php
 final_path=/var/www/$app
 sudo mkdir -p $final_path
 
+# Get source
 SETUP_SOURCE
 
 sudo cp ../conf/dokuwiki.php $final_path/conf
@@ -68,8 +69,9 @@ fi
 sudo chmod -R 755 $final_path/lib/plugins
 
 # Update all plugins
-for name_plugin in `sudo -s cat $final_path/lib/plugins/*/plugin.info.txt | grep url | awk -F':' '{print $3}'`;
+for name_plugin in $(sudo -s cat $final_path/lib/plugins/*/plugin.info.txt | grep url | awk -F':' '{print $3}');
 do
+		# Get a official plugin for dokuwiki, not update a no-official
 		sudo wget -nv "https://github.com/splitbrain/dokuwiki-plugin-${name_plugin}/zipball/master" -O "${name_plugin}.zip" || true
 		if [ -s "${name_plugin}.zip" ]; then
 			sudo unzip ${name_plugin}.zip
@@ -106,6 +108,9 @@ if [ "$is_public" = "Yes" ];
 then
 	sudo sed -i "s@#--PRIVATE--@@g" /etc/nginx/conf.d/$domain.d/$app.conf
 fi
+
+# Create the php-fpm pool config
+POOL_FPM
 
 # Setup SSOwat
 ynh_app_setting_set "$app" is_public "$is_public"
