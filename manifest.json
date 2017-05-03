@@ -56,12 +56,13 @@
             },
             {
                 "name": "is_public",
+                "type": "boolean",
                 "ask": {
                     "en": "Is it a public DokuWiki site ?",
                     "fr": "Est-ce un site public ?"
                 },
-                "choices": ["Yes", "No"],
-                "default": "Yes"
+                "choices": ["true", "false"],
+                "default": "true"
             }
         ]
     }

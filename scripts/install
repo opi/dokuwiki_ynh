@@ -83,19 +83,12 @@ fi
 # Create the php-fpm pool config
 POOL_FPM
 
-# Public access for curl
-ynh_app_setting_set $app unprotected_uris "/"
-
-# Relaod SSOwat configuration
-sudo yunohost app ssowatconf
+# Set ssowat config
+if [[ $is_public -eq 0 ]]; then
+	ynh_app_setting_delete $app unprotected_uris
+	sudo yunohost app ssowatconf
+fi
 
 # Reload php5-fpm and Nginx
 sudo systemctl reload php5-fpm
 sudo systemctl reload nginx
-
-if [ "$is_public" = "No" ];
-then
-	# Exit public access
-	ynh_app_setting_delete $app unprotected_uris
-	sudo yunohost app ssowatconf
-fi
