@@ -18,6 +18,9 @@ sudo rm -f "/etc/php5/fpm/pool.d/${app}.conf"
 sudo rm -f "/etc/php5/fpm/conf.d/20-${app}.ini"
 [[ -n $domain ]] && sudo rm -f "/etc/nginx/conf.d/${domain}.d/${app}.conf"
 
+# Delete system user dedicace for this app
+ynh_system_user_delete $app
+
 # Reload services
 sudo systemctl reload php5-fpm
 sudo systemctl reload nginx
