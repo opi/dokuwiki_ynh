@@ -6,6 +6,8 @@ set -u
 # Get multi-instances specific variables
 app=$YNH_APP_INSTANCE_NAME
 
+# Loads the generic functions usually used in the script
+source .fonctions 
 # Source app helpers
 . /usr/share/yunohost/helpers
 

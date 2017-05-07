@@ -3,6 +3,7 @@
 # Exit on command errors and treat unset variables as an error
 set -eu
 
+# Loads the generic functions usually used in the script
 source .fonctions
 # Source app helpers
 source /usr/share/yunohost/helpers
