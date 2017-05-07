@@ -61,7 +61,6 @@
                     "en": "Is it a public DokuWiki site ?",
                     "fr": "Est-ce un site public ?"
                 },
-                "choices": ["true", "false"],
                 "default": "true"
             }
         ]
