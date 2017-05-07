@@ -92,6 +92,5 @@ if [[ $is_public -eq 0 ]]; then
 	sudo yunohost app ssowatconf
 fi
 
-# Reload php5-fpm and Nginx
-sudo systemctl reload php5-fpm
+# Reload Nginx
 sudo systemctl reload nginx
