@@ -7,6 +7,11 @@ set -eu
 # The parameter $2 is the id of the app instance ex: ynhexample__2
 app=$YNH_APP_INSTANCE_NAME
 
+if [ ! -e .fonctions ]; then
+	# Get file fonction if not been to the current directory
+	sudo cp ../settings/scripts/.fonctions ./.fonctions
+	sudo chmod a+rx .fonctions
+fi
 # Loads the generic functions usually used in the script
 source .fonctions
 # Source app helpers
