@@ -88,9 +88,14 @@ fi
 POOL_FPM
 
 # Set ssowat config
-if [[ $is_public -eq 0 ]]; then
-	ynh_app_setting_delete $app unprotected_uris
-	sudo yunohost app ssowatconf
+if [ $is_public -eq 0 ]
+then
+	ynh_app_setting_delete $app skipped_uris # Delete public access
+fi
+
+if [ $is_public -eq 1 ]
+then
+	ynh_app_setting_set $app skipped_uris "/" # Make app public if necessary
 fi
 
 # Reload Nginx
