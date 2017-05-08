@@ -91,17 +91,18 @@ done
 # Files owned by www-data can just read
 # sudo find $final_path -type f -print0 | xargs -0 sudo chmod 0644
 # sudo find $final_path -type d -print0 | xargs -0 sudo chmod 0755
-sudo chown -R www-data: $final_path
+sudo chown -R $app: $final_path
 
 # except for conf, data, some data subfolders, and lib/plugin, where www-data must have write permissions
 if [ -d "${final_path}/data/media" ]; then
-	sudo chown -R www-data:root $final_path/{data/attic,data/cache,data/index,data/locks,data/media*,data/meta,data/pages,data/tmp}
+	sudo chown -R $app:root $final_path/{data/attic,data/cache,data/index,data/locks,data/media*,data/meta,data/pages,data/tmp}
 fi
-sudo chown -R www-data:root $final_path/{conf,data,lib/plugins,lib/tpl}
+sudo chown -R $app:root $final_path/{conf,data,lib/plugins,lib/tpl}
 sudo chmod -R 700 $final_path/conf
 sudo chmod -R 700 $final_path/data
 sudo chmod -R 700 $final_path/lib/plugins
-sudo chmod -R 700 $final_path/lib/tpl
+# sudo chmod -R 700 $final_path/lib/tpl
+sudo chmod 775 $final_path/lib/tpl/{dokuwiki,dokuwiki/images}
 
 # Modify Nginx configuration file and copy it to Nginx conf directory
 sudo sed -i "s@__PATHTOCHANGE__@$path@g" /etc/nginx/conf.d/$domain.d/$app.conf
@@ -125,6 +126,5 @@ elif [ "$is_public" = "No" ]; then
  	is_public=0
 fi
 
-sudo systemctl reload php5-fpm
 sudo systemctl reload nginx
 sudo yunohost app ssowatconf
