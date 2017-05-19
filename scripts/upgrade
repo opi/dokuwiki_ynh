@@ -89,8 +89,6 @@ do
 done
 
 # Files owned by www-data can just read
-# sudo find $final_path -type f -print0 | xargs -0 sudo chmod 0644
-# sudo find $final_path -type d -print0 | xargs -0 sudo chmod 0755
 sudo chown -R $app: $final_path
 
 # except for conf, data, some data subfolders, and lib/plugin, where www-data must have write permissions
@@ -101,7 +99,6 @@ sudo chown -R $app:root $final_path/{conf,data,lib/plugins,lib/tpl}
 sudo chmod -R 700 $final_path/conf
 sudo chmod -R 700 $final_path/data
 sudo chmod -R 700 $final_path/lib/plugins
-# sudo chmod -R 700 $final_path/lib/tpl
 sudo chmod 775 $final_path/lib/tpl/{dokuwiki,dokuwiki/images}
 
 # Modify Nginx configuration file and copy it to Nginx conf directory
@@ -121,7 +118,7 @@ POOL_FPM
 if [ "$is_public" = "Yes" ]; then
 	ynh_app_setting_set $app is_public 1 # Fixe is_public en booléen
 	is_public=1
-elif [ "$is_public" = "No" ]; then
+else
 	ynh_app_setting_set $app is_public 0
  	is_public=0
 fi

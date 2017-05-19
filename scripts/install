@@ -61,8 +61,6 @@ sudo cp ../conf/dokuwiki.php $final_path/conf
 sudo cp ../conf/acl.auth.php $final_path/conf
 
 # Files owned by dokuwiki can just read
-# sudo find $final_path -type f -print0 | xargs -0 sudo chmod 0644
-# sudo find $final_path -type d -print0 | xargs -0 sudo chmod 0755
 sudo chown -R $app: $final_path
 
 # except for conf, data, some data subfolders, and lib/plugin, where www-data must have write permissions
@@ -70,7 +68,6 @@ sudo chown -R $app:root $final_path/{conf,data,data/attic,data/cache,data/index,
 sudo chmod -R 700 $final_path/conf
 sudo chmod -R 700 $final_path/data
 sudo chmod -R 700 $final_path/lib/plugins
-# sudo chmod -R 700 $final_path/lib/tpl
 sudo chmod 775 $final_path/lib/tpl/{dokuwiki,dokuwiki/images}
 
 # Modify Nginx configuration file and copy it to Nginx conf directory
@@ -87,15 +84,10 @@ fi
 # Create the php-fpm pool config
 POOL_FPM
 
-# Set ssowat config
-if [ $is_public -eq 0 ]
-then
-	ynh_app_setting_delete $app skipped_uris # Delete public access
-fi
-
-if [ $is_public -eq 1 ]
-then
-	ynh_app_setting_set $app skipped_uris "/" # Make app public if necessary
+# If app is public, add url to SSOWat conf as skipped_uris
+if [[ $is_public -eq 1 ]]; then
+  # unprotected_uris allows SSO credentials to be passed anyway.
+  ynh_app_setting_set "$app" unprotected_uris "/"
 fi
 
 # Reload Nginx

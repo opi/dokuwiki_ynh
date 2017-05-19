@@ -55,7 +55,7 @@ ynh_system_user_create $app
 sudo cp -a ./sources "${final_path}"
 
 # Set permissions
-sudo chown -R www-data: "${final_path}"
+sudo chown -R $app: "${final_path}"
 
 # Restore nginx configuration files
 sudo cp -a ./nginx.conf   "${nginx_conf}"
