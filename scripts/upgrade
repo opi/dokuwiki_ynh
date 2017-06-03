@@ -89,7 +89,7 @@ do
 done
 
 # Files owned by www-data can just read
-sudo chown -R $app: $final_path
+sudo chown -R root: $final_path
 
 # except for conf, data, some data subfolders, and lib/plugin, where dokuwiki must have write permissions
 if [ -d "${final_path}/data/media" ]; then
@@ -99,7 +99,7 @@ sudo chown -R $app:root $final_path/{conf,data,lib/plugins,lib/tpl}
 sudo chmod -R 700 $final_path/conf
 sudo chmod -R 700 $final_path/data
 sudo chmod -R 700 $final_path/lib/plugins
-sudo chmod 775 $final_path/lib/tpl/{dokuwiki,dokuwiki/images}
+sudo chmod 755 $final_path/lib/tpl/{dokuwiki,dokuwiki/images}
 
 # Modify Nginx configuration file and copy it to Nginx conf directory
 sudo sed -i "s@__PATHTOCHANGE__@$path@g" /etc/nginx/conf.d/$domain.d/$app.conf
