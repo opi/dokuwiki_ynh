@@ -1,7 +1,7 @@
 # Dokuwiki for YunoHost
 
 
-[![Install Dockuwiki with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=dockuwiki)
+[![Install Dockuwiki with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=dokuwiki)
 
 
 ## Dokuwiki c'est quoi ?
