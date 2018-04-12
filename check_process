@@ -37,4 +37,4 @@
 ;;; Upgrade options
 	; commit=01add99d3d903ca6d07f863045edf2ba46cf18d5
 		name=Create check_process
-		manifest_arg=domain=DOMAIN&path=PATH&admin=USER&is_public=1&
+		manifest_arg=domain=DOMAIN&path=PATH&admin=USER&is_public=Yes&
