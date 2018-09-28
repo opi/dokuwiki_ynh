@@ -1,0 +1,133 @@
+#!/bin/bash
+
+#=================================================
+# GENERIC STARTING
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
+source scripts/_common.sh
+source /usr/share/yunohost/helpers
+
+#=================================================
+# RETRIEVE ARGUMENTS
+#=================================================
+
+# Get authentication backend and set as lowercase
+#auth_backend=${YNH_ACTION_IS_INTERNAL_USERS,,}
+# Get "is_internal_users" and set as lowercase
+is_internal_users=${YNH_ACTION_IS_INTERNAL_USERS,,}
+
+# Get the full name of the app, Example: strut__3
+app=$YNH_APP_INSTANCE_NAME
+
+admin=$(ynh_app_setting_get $app admin)
+is_public=$(ynh_app_setting_get $app is_public)
+final_path=$(ynh_app_setting_get $app final_path)
+
+auth_backend_old=$(ynh_app_setting_get $app auth_backend)
+is_internal_users_old=$(ynh_app_setting_get $app is_internal_users)
+
+#=================================================
+# CHECK IF ARGUMENTS AND REQUIREMENTS ARE CORRECT
+#=================================================
+
+#=================================================
+# CHECK IF AN ACTION HAS TO BE DONE
+#=================================================
+
+if [ $is_internal_users -eq $is_internal_users_old ]
+then
+    ynh_die "is_internal_users is already set as $is_internal_users." 0
+fi
+
+# Ensure that app is public
+if [ $is_public -eq 0 ]; then
+    ynh_die "Wiki must be public if you want your people to be able to reach it. Run 'public_private' and come back here" 1
+fi
+
+# Plugin "authchained" needs to be installed for this script to run
+if [ ! -d $final_path/lib/plugins/authchained ]; then
+    ynh_die "Plugin 'authchained' is not installed and must be installed beforehand." 1
+fi
+
+### automatic installation of "authchained" plugin
+### FIXME plugin installed this way does not work. Had to reinstall from "admin panel"
+# Install "authchained" plugin. Allows to use multiple users backend storage : LDAP + internal DokuWiki users
+# See https://www.dokuwiki.org/plugin:authchained?s[]=chained
+
+#sudo wget -nv --quiet "https://github.com/splitbrain/dokuwiki-plugin-${name_plugin}/zipball/master" -O "${name_plugin}.zip" -o /dev/null || true
+#plugin_archive=dokuwiki-plugin-authchained.zip
+#wget -nv --quiet 'https://github.com/rztuc/dokuwiki-plugin-authchained/archive/master.zip' -O "$plugin_archive" -o /dev/null || true
+#
+## if "file is not zero size"
+#if [ -s "$plugin_archive" ]; then
+#        # path "authchained" is hardcoded and a better way should be to use the "base" field from the plugin archive
+#        # See https://www.dokuwiki.org/devel:plugin_info
+#        mkdir $final_path/lib/plugins/authchained
+#
+#       # Extract plugin files strayed to the local plugin directory
+#        # Assume that the plugin name will not change in the futur
+#        #
+#        # unzip options
+#        #   -j junk paths (do not make directories)
+#        #   -d extract files into exdir
+#        unzip -j -d $final_path/lib/plugins/authchained "$plugin_archive"
+#
+#        # Set filesystem rights for new plugin
+#        chown -R $app:root $final_path/lib/plugins/authchained
+#fi
+
+#=================================================
+# SPECIFIC ACTION
+#=================================================
+
+### Verify the checksum of a file, stored by `ynh_store_file_checksum` in the install script.
+### And create a backup of this file if the checksum is different. So the file will be backed up if the admin had modified it.
+ynh_backup_if_checksum_is_different "$final_path/conf/local.protected.php"
+
+# Always overwrite local file with the one from package.
+cp conf/local.protected.php $final_path/conf
+
+if [ $is_internal_users -eq 1 ];
+then
+        auth_backend="authchained"
+
+        #authchained_configuration='$conf['p	lugin']['authchained']['authtypes'] = 'authldap:authplain';'
+        #grep -q -F '$conf['plugin']['authchained']['authtypes'] = 'authldap:authplain';' "$final_path/conf/local.protected.php" || echo 'include "/configs/projectname.conf"' >> foo.bar
+
+        # Search if configuration in "config file" is present for plugin to work
+        #TODO could be added straight to 'local.protected.php' file ?
+        grep -q -F '$conf['plugin']['authchained']['authtypes'] = 'authldap:authplain';' "$final_path/conf/local.protected.php"
+        if [ $? -ne 0 ]; then
+                # If not found, add the setting to "local.protected.php" which can only be edited by Yunohost
+                # \$conf needs the "\" to espace the dollar and avoid echo to interprate it as a (void) variable
+                echo "\$conf['plugin']['authchained']['authtypes'] = 'authldap:authplain';" >> "$final_path/conf/local.protected.php"
+        fi
+        # source: https://stackoverflow.com/questions/3557037/appending-a-line-to-a-file-only-if-it-does-not-already-exist
+else
+        auth_backend="authldap"
+fi
+
+# Set the authentification backend
+#ynh_replace_string "^$conf['authtype'].*" "$conf['authtype'] = '$auth_backend';" "$final_path/conf/local.protected.php"
+ynh_replace_string "__YNH_AUTH_BACKEND__" "$auth_backend" "$final_path/conf/local.protected.php"
+# Set the "admin" user
+ynh_replace_string "__YNH_ADMIN_USER__"   "$admin"        "$final_path/conf/local.protected.php"
+
+# Recalculate and store the config file checksum into the app settings
+ynh_store_file_checksum "$final_path/conf/local.protected.php"
+
+
+# Regen ssowat configuration
+yunohost app ssowatconf
+
+# Update the config of the app
+ynh_app_setting_set $app auth_backend      $auth_backend
+ynh_app_setting_set $app is_internal_users $is_internal_users
+
+#=================================================
+# RELOAD NGINX
+#=================================================
+
+systemctl reload nginx
