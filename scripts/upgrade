@@ -23,6 +23,9 @@ is_public=$(ynh_app_setting_get $app is_public)
 #language=$(ynh_app_setting_get $app language)
 final_path=$(ynh_app_setting_get $app final_path)
 
+auth_backend=$(ynh_app_setting_get $app auth_backend)
+#is_internal_users=$(ynh_app_setting_get $app is_internal_users)
+
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
@@ -55,6 +58,11 @@ if [ -z "$language" ]; then
 	ynh_app_setting_set $app language $language
 fi
 
+# 'is_internal_users' default value, if not set
+if [ -z "$is_internal_users" ]; then
+	ynh_app_setting_set $app is_internal_users 0
+fi
+
 
 
 # Yunohost specific configuration, if not exists
@@ -78,8 +86,10 @@ fi
 if [ ! -f "$final_path/conf/local.protected.php" ]; then
 	cp ../conf/local.protected.php $final_path/conf
 
-	# Set the default "admin"
-	ynh_replace_string "__YNH_ADMIN_USER__" "$admin" "$final_path/conf/local.protected.php"
+	# Set the authentification backend
+	ynh_replace_string "__YNH_AUTH_BACKEND__" "$auth_backend" "$final_path/conf/local.protected.php"
+	# Set the "admin" user
+	ynh_replace_string "__YNH_ADMIN_USER__"   "$admin"        "$final_path/conf/local.protected.php"
 fi
 
 # Do not overwrite existing dokuwiki configuration as it could have user customization's and settings.
@@ -238,8 +248,10 @@ ynh_backup_if_checksum_is_different "$final_path/conf/local.protected.php"
 # Always overwrite local file with the one from package.
 cp ../conf/local.protected.php $final_path/conf
 
+# Set the authentification backend
+ynh_replace_string "__YNH_AUTH_BACKEND__" "$auth_backend" "$final_path/conf/local.protected.php"
 # Set the "admin" user
-ynh_replace_string "__YNH_ADMIN_USER__" "$admin"  "$final_path/conf/local.protected.php"
+ynh_replace_string "__YNH_ADMIN_USER__"   "$admin"        "$final_path/conf/local.protected.php"
 
 # Recalculate and store the checksum of the file for the next upgrade.
 ynh_store_file_checksum "$final_path/conf/local.protected.php"
