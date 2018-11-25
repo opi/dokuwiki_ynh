@@ -25,7 +25,11 @@ $conf['plugin']['authldap']['usertree']    = 'ou=users,dc=yunohost,dc=org';
 $conf['plugin']['authldap']['userfilter']  = '(&(uid=%{user})(objectClass=posixAccount))';
 # no groups
 #$conf['plugin']['authldap']['grouptree']   = 'ou=Group, dc=server, dc=tld';
-#$conf['plugin']['authldap']['groupfilter'] = '(&(objectClass=posixGroup)(|(gidNumber=%{gid})(memberUID=%{user})))'; 
+#$conf['plugin']['authldap']['groupfilter'] = '(&(objectClass=posixGroup)(|(gidNumber=%{gid})(memberUID=%{user})))';
+
+// Authchained plugin preload configuration. Can be used by 'internal_users' action script
+//$conf['plugin']['authchained']['authtypes'] = 'authldap:authplain';
+//
 
 /* Advanced Settings */
 $conf['updatecheck'] = 0;                //automatically check for new releases?
