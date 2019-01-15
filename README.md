@@ -20,6 +20,13 @@ Source: [dokuwiki.org](https://www.dokuwiki.org/)
 
 Lors de la mise à jour de dokuwiki, les plugins officiels sont également mis à jour. Nous vous recommandons toutefois de vérifier le bon fonctionnement des plugins dans le panel d'administration après cette upgrade. Nous ne pouvons pas savoir si des plugins spéciaux posent problèmes.
 
+### Utiliser l'API distante XML-RPC
+
+Si vous utilisez le service XML-RPC proposé par Dokuwiki (par exemple, si vous voulez utilisez le plugin "DokuWiki Synchronization Plugin"), il faut désactiver le SSO YunoHost sur l'URI correspondante :
+
+`$ yunohost app setting dokuwiki skipped_uris -v "/lib/exe/xmlrpc.php"`
+`$ yunohost app ssowatconf`
+
 ## What is Dokuwiki?
 
 DokuWiki is a simple to use and highly versatile Open Source wiki software that doesn't require a database. It is loved by users for its clean and readable syntax. The ease of maintenance, backup and integration makes it an administrator's favorite. Built in access controls and authentication connectors make DokuWiki especially useful in the enterprise context and the large number of plugins contributed by its vibrant community allow for a broad range of use cases beyond a traditional wiki.
@@ -35,6 +42,13 @@ Source: [dokuwiki.org](https://www.dokuwiki.org/)
 `$ sudo yunohost app upgrade --verbose dokuwiki -u https://github.com/YunoHost-Apps/dokuwiki_ynh.git`
 
 When updating dokuwiki, the official plugins are also updated. However, we recommend that you check the plugins in the administration panel after this upgrade. We can't know if special plugins are causing problems.
+
+### Use the remote API XML-RPC
+
+If you want to use the XML-RPC API (for instance, if you plan to use the "DokuWiki Synchronization Plugin"), you need to disable YunoHost SSO on the URI:
+
+`$ yunohost app setting dokuwiki skipped_uris -v "/lib/exe/xmlrpc.php"`
+`$ yunohost app ssowatconf`
 
 ## Versionning
 
