@@ -44,43 +44,6 @@ then
     ynh_die "is_internal_users is already set as $is_internal_users." 0
 fi
 
-# Ensure that app is public
-if [ $is_public -eq 0 ]; then
-    ynh_die "Wiki must be public if you want your people to be able to reach it. Run 'public_private' and come back here" 1
-fi
-
-# Plugin "authchained" needs to be installed for this script to run
-if [ ! -d $final_path/lib/plugins/authchained ]; then
-    ynh_die "Plugin 'authchained' is not installed and must be installed beforehand." 1
-fi
-
-### automatic installation of "authchained" plugin
-### FIXME plugin installed this way does not work. Had to reinstall from "admin panel"
-# Install "authchained" plugin. Allows to use multiple users backend storage : LDAP + internal DokuWiki users
-# See https://www.dokuwiki.org/plugin:authchained?s[]=chained
-
-#sudo wget -nv --quiet "https://github.com/splitbrain/dokuwiki-plugin-${name_plugin}/zipball/master" -O "${name_plugin}.zip" -o /dev/null || true
-#plugin_archive=dokuwiki-plugin-authchained.zip
-#wget -nv --quiet 'https://github.com/rztuc/dokuwiki-plugin-authchained/archive/master.zip' -O "$plugin_archive" -o /dev/null || true
-#
-## if "file is not zero size"
-#if [ -s "$plugin_archive" ]; then
-#        # path "authchained" is hardcoded and a better way should be to use the "base" field from the plugin archive
-#        # See https://www.dokuwiki.org/devel:plugin_info
-#        mkdir $final_path/lib/plugins/authchained
-#
-#       # Extract plugin files strayed to the local plugin directory
-#        # Assume that the plugin name will not change in the futur
-#        #
-#        # unzip options
-#        #   -j junk paths (do not make directories)
-#        #   -d extract files into exdir
-#        unzip -j -d $final_path/lib/plugins/authchained "$plugin_archive"
-#
-#        # Set filesystem rights for new plugin
-#        chown -R $app:root $final_path/lib/plugins/authchained
-#fi
-
 #=================================================
 # SPECIFIC ACTION
 #=================================================
