@@ -23,7 +23,7 @@ is_public=$(ynh_app_setting_get $app is_public)
 final_path=$(ynh_app_setting_get $app final_path)
 
 auth_backend=$(ynh_app_setting_get $app auth_backend)
-#is_internal_users=$(ynh_app_setting_get $app is_internal_users)
+is_internal_users=$(ynh_app_setting_get $app is_internal_users)
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
@@ -56,6 +56,12 @@ fi
 if [ -z "$language" ]; then
 	language='en'
 	ynh_app_setting_set $app language $language
+fi
+
+# 'auth_backend' default value, if not set
+if [ -z "$auth_backend" ]; then
+	auth_backend='authldap'
+	ynh_app_setting_set $app auth_backend $authldap
 fi
 
 # 'is_internal_users' default value, if not set

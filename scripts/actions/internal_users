@@ -13,8 +13,6 @@ source /usr/share/yunohost/helpers
 # RETRIEVE ARGUMENTS
 #=================================================
 
-# Get authentication backend and set as lowercase
-#auth_backend=${YNH_ACTION_IS_INTERNAL_USERS,,}
 # Get "is_internal_users" and set as lowercase
 is_internal_users=${YNH_ACTION_IS_INTERNAL_USERS,,}
 
@@ -31,6 +29,11 @@ is_internal_users_old=$(ynh_app_setting_get $app is_internal_users)
 #=================================================
 # CHECK IF ARGUMENTS AND REQUIREMENTS ARE CORRECT
 #=================================================
+
+# Ensure that app is public
+if [ $is_public -eq 0 ]; then
+    ynh_die "Wiki must be public if you want your people to be able to reach it. Run 'public_private' and come back here" 1
+fi
 
 #=================================================
 # CHECK IF AN ACTION HAS TO BE DONE
@@ -118,16 +121,9 @@ ynh_replace_string "__YNH_ADMIN_USER__"   "$admin"        "$final_path/conf/loca
 # Recalculate and store the config file checksum into the app settings
 ynh_store_file_checksum "$final_path/conf/local.protected.php"
 
-
-# Regen ssowat configuration
-yunohost app ssowatconf
+# Purge cache; see https://www.dokuwiki.org/faq:pluginproblems#cache
+touch $final_path/conf/local.php
 
 # Update the config of the app
 ynh_app_setting_set $app auth_backend      $auth_backend
 ynh_app_setting_set $app is_internal_users $is_internal_users
-
-#=================================================
-# RELOAD NGINX
-#=================================================
-
-systemctl reload nginx
