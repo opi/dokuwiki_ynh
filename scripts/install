@@ -71,7 +71,8 @@ ynh_app_setting_set $app language $language
 # Can be changed by action script "internal_users"
 auth_backend='authldap'   # Default backend is LDAP with Yunohost, 'authldap' for DokuWiki
 ynh_app_setting_set $app auth_backend $auth_backend
-# Disable the 'is_internal_users' feature
+
+# Force disable the 'is_internal_users' feature
 ynh_app_setting_set $app is_internal_users 0
 
 #=================================================
