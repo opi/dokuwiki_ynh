@@ -2,9 +2,6 @@
     "name": "Dokuwiki",
     "id": "dokuwiki",
     "packaging_format": 1,
-    "requirements": {
-        "yunohost": ">> 2.7.14"
-    },
     "description": {
         "en": "DokuWiki is a simple to use and highly versatile Open Source wiki software that doesn't require a database.",
         "fr": "DokuWiki est un wiki Open Source simple à utiliser et très polyvalent qui n'exige aucune base de données.",
@@ -12,8 +9,9 @@
         "es": "DokuWiki es un sistema de Wiki de uso sencillicimo y compatible con los estándares.",
         "it": "DokuWiki è un Wiki aderente agli standard, semplice da usare, finalizzato principalmente alla creazione di documentazione di qualsiasi tipo."
     },
-    "version": "2018-04-22a~ynh1",
+    "version": "2018-04-22a~ynh2",
     "url": "https://www.dokuwiki.org",
+    "license": "GPL-2.0-or-later",
     "maintainer": {
         "name": "Gofannon",
         "email": "gofannon@riseup.net"
@@ -21,16 +19,16 @@
     "previous_maintainers": [
     {
         "name": "opi",
-        "email": "opi@zeropi.net",
-        "url": ""
-    }
-],
+        "email": "opi@zeropi.net"
+    }],
+    "requirements": {
+        "yunohost": ">= 3.0"
+    },
     "multi_instance": true,
     "services": [
         "nginx",
-        "php5-fpm"
+        "php7.0-fpm"
     ],
-    "license": "GPL-2.0-or-later",
     "arguments": {
         "install" : [
             {
@@ -72,6 +70,7 @@
             },
             {
                 "name": "language",
+                "type": "string",
                 "ask": {
                     "en": "Choose the application language",
                     "fr": "Choisissez la langue de l'application"

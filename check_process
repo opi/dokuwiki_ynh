@@ -1,8 +1,3 @@
-# See here for more informations
-# https://github.com/YunoHost/package_check#syntax-check_process-file
-
-# Move this file from check_process.default to check_process when you have filled it.
-
 ;; Test complet
 	auto_remove=1
 	; Manifest
@@ -10,6 +5,7 @@
 		path="/path"	(PATH)
 		admin="john"	(USER)
 		is_public=1	(PUBLIC|public=1|private=0)
+		language=en
 	; Checks
 		pkg_linter=1
 		setup_sub_dir=1
@@ -35,10 +31,10 @@
 	Level 8=0
 	Level 9=0
 	Level 10=0
-;;; Upgrade options
-	; commit=01add99d3d903ca6d07f863045edf2ba46cf18d5
-		name=Create check_process
-		manifest_arg=domain=DOMAIN&path=PATH&admin=USER&is_public=Yes&
 ;;; Options
 Email=
 Notification=none
+;;; Upgrade options
+	; commit=01add99d3d903ca6d07f863045edf2ba46cf18d5
+		name=Create check_process
+		manifest_arg=domain=DOMAIN&path=PATH&admin=USER&is_public=Yes&language=en&
