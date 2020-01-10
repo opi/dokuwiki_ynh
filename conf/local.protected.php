@@ -26,5 +26,9 @@ $conf['plugin']['authldap']['userfilter']  = '(&(uid=%{user})(objectClass=posixA
 
 /* Advanced Settings */
 $conf['updatecheck'] = 0;                //automatically check for new releases?
+
 // Taken from previous package. Don't know what it does. Maybe Yunohost corner logo ?
 $conf['cssdatauri']  = 512;              //Maximum byte size of small images to embed into CSS, won't work on IE<8
+
+// URL Rewriting is handled by the webserver
+$conf['userewrite'] = 1;                 // See https://www.dokuwiki.org/config:userewrite
