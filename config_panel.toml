@@ -1,0 +1,30 @@
+version = "0.1"
+name = "DokuWiki configuration panel"
+
+[main]
+name = "DokuWiki configuration"
+
+    [main.public_access]
+    name = "Public access"
+
+        [main.public_access.is_public]
+        ask = "Is it a public website ?"
+        type = "boolean"
+        default = false
+        help = "By activating this, people who does not have a YunoHost account will be able to reach your Wiki."
+
+    [main.internal_users]
+    name = "Internal users"
+
+        [main.internal_users.is_internal_users]
+        ask = "Allow local users from DokuWiki in addition to Yunohost users ?"
+        type = "boolean"
+        default = false
+        help = "By activating this, people will be able to create account and loggin on the wiki"
+
+        # WIP
+        #[main.internal_users.self_register]
+        #name = "Allow guest users to create an account ?"
+        #help = "By activating this, people will be able to self register and then logging"
+        #type = "bool"
+        #default = false

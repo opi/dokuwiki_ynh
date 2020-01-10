@@ -1,0 +1,52 @@
+[public_private]
+name = "Move to public or private"
+command = "/bin/bash scripts/actions/public_private"
+user = "root"  # optional
+#cwd = "/" # optional
+#accepted_return_codes = [0, 1, 2, 3]  # optional
+accepted_return_codes = [0]
+description = "Change the public access of the app."
+
+    [public_private.arguments]
+        [public_private.arguments.is_public]
+        type = "boolean"
+        ask = "Is it a public app ? (1/0) (1=yes; 0=no)"
+        example = "0"
+        default = false
+
+[internal_users]
+name = "Allow DokuWiki internal users storage in addition to Yunohost"
+command = "/bin/bash scripts/actions/internal_users"
+user = "root"  # optional
+#cwd = "/" # optional
+#accepted_return_codes = [0, 1, 2, 3]  # optional
+accepted_return_codes = [0]
+description = "Enable DokuWiki internal users."
+
+    [internal_users.arguments]
+        [internal_users.arguments.is_internal_users]
+        type = "boolean"
+        ask = "Want to enable DokuWiki users too ? (1/0) (1=yes; 0=no)"
+        example = "0"
+        default = false
+
+#[echo_plop]
+#name = "echo plop"
+#command = "echo plop"
+#
+#    [echo_plop.arguments]
+#        [echo_plop.arguments.argument_one]
+#        type = "string"
+#        ask = "some stuff"
+#        example = "stuff"
+#
+#        [echo_plop.arguments.argument_two]
+#        type = "string"
+#        ask = "some stuff"
+#        example = "stuff"
+#
+#        [echo_plop.arguments.argument_three]
+#        type = "string"
+#        ask = "some stuff"
+#        example = "stuff"
+#
