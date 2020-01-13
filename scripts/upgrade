@@ -12,15 +12,24 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_print_info "Loading installation settings..."
+ynh_script_progression --message="Loading installation settings..." --weight=2
 
 app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get $app domain)
-path_url=$(ynh_app_setting_get $app path)
-admin=$(ynh_app_setting_get $app admin)
-is_public=$(ynh_app_setting_get $app is_public)
-final_path=$(ynh_app_setting_get $app final_path)
+domain=$(ynh_app_setting_get --app=$app --key=domain)
+path_url=$(ynh_app_setting_get --app=$app --key=path)
+admin=$(ynh_app_setting_get --app=$app --key=admin)
+is_public=$(ynh_app_setting_get --app=$app --key=is_public)
+final_path=$(ynh_app_setting_get --app=$app --key=final_path)
+
+#=================================================
+# CHECK VERSION
+#=================================================
+
+upgrade_type=$(ynh_check_app_version_changed)
+
+auth_backend=$(ynh_app_setting_get $app auth_backend)
+is_internal_users=$(ynh_app_setting_get $app is_internal_users)
 
 auth_backend=$(ynh_app_setting_get $app auth_backend)
 is_internal_users=$(ynh_app_setting_get $app is_internal_users)
@@ -28,34 +37,45 @@ is_internal_users=$(ynh_app_setting_get $app is_internal_users)
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
-ynh_print_info "Ensuring downward compatibility..."
+ynh_script_progression --message="Ensuring downward compatibility..."
 
 # Fix is_public as a boolean value
 if [ "$is_public" = "Yes" ]; then
-	ynh_app_setting_set $app is_public 1
+	ynh_app_setting_set --app=$app --key=is_public --value=1
 	is_public=1
 elif [ "$is_public" = "No" ]; then
-	ynh_app_setting_set $app is_public 0
+	ynh_app_setting_set --app=$app --key=is_public --value=0
 	is_public=0
 fi
 
 # If final_path doesn't exist, create it
-if [ -z $final_path ]; then
+if [ -z "$final_path" ]; then
 	final_path=/var/www/$app
-	ynh_app_setting_set $app final_path $final_path
+	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 fi
 
 # TODO Not sure if still needed ??
 # admin default value, if not set
 if [ -z "$admin" ]; then
-	admin=$(sudo yunohost user list | grep 'username' -m1 | awk '{print $2}')
-	sudo ynh_app_setting_set $app is_public -v "$is_public"
+	admin=$(yunohost user list | grep 'username' -m1 | awk '{print $2}')
+	ynh_app_setting_set --app=$app --key=is_public --value=$is_public
 fi
 
 # language default value, if not set
 if [ -z "$language" ]; then
 	language='en'
-	ynh_app_setting_set $app language $language
+	ynh_app_setting_set --app=$app --key=language --value=$language
+fi
+
+# 'auth_backend' default value, if not set
+if [ -z "$auth_backend" ]; then
+	auth_backend='authldap'
+	ynh_app_setting_set $app auth_backend $authldap
+fi
+
+# 'is_internal_users' default value, if not set
+if [ -z "$is_internal_users" ]; then
+	ynh_app_setting_set $app is_internal_users 0
 fi
 
 # 'auth_backend' default value, if not set
@@ -100,7 +120,7 @@ if [ ! -f "$final_path/conf/local.php" ]; then
 	cp ../conf/local.php $final_path/conf
 
 	# Set the default "language"
-	ynh_replace_string "__YNH_LANGUAGE__" "$language" "$final_path/conf/local.php"
+	ynh_replace_string --match_string="__YNH_LANGUAGE__" --replace_string="$language" --target_file="$final_path/conf/local.php"
 fi
 
 # Do not overwrite existing ACL configuration file as it could have user customization's and settings.
@@ -149,7 +169,7 @@ fi
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
-ynh_print_info "Backing up the app before upgrading (may take a while)..."
+ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=9
 
 # Backup the current version of the app
 ynh_backup_before_upgrade
@@ -165,22 +185,26 @@ ynh_abort_if_errors
 #=================================================
 
 # Normalize the URL path syntax
-path_url=$(ynh_normalize_url_path $path_url)
+path_url=$(ynh_normalize_url_path --path_url=$path_url)
 
 #=================================================
 # STANDARD UPGRADE STEPS
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_print_info "Upgrading source files..."
 
-# Download, check integrity, uncompress and patch the source from app.src
-ynh_setup_source "$final_path"
+if [ "$upgrade_type" == "UPGRADE_APP" ]
+then
+	ynh_script_progression --message="Upgrading source files..." --weight=2
+
+	# Download, check integrity, uncompress and patch the source from app.src
+	ynh_setup_source --dest_dir="$final_path"
+fi
 
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_print_info "Upgrading nginx web server configuration..."
+ynh_script_progression --message="Upgrading nginx web server configuration..." --weight=2
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
@@ -188,15 +212,15 @@ ynh_add_nginx_config
 #=================================================
 # CREATE DEDICATED USER
 #=================================================
-ynh_print_info "Making sure dedicated system user exists..."
+ynh_script_progression --message="Making sure dedicated system user exists..."
 
 # Create a system user
-ynh_system_user_create $app
+ynh_system_user_create --username=$app
 
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
-ynh_print_info "Upgrading php-fpm configuration..."
+ynh_script_progression --message="Upgrading php-fpm configuration..."
 
 # Create a dedicated php-fpm config
 ynh_add_fpm_config
@@ -204,37 +228,41 @@ ynh_add_fpm_config
 #=================================================
 # SPECIFIC UPGRADE
 #=================================================
-ynh_print_info "Upgrading dokuwiki..."
 
-# Remove upgrade notification inside Dokuwiki's admin panel
-# See https://www.dokuwiki.org/update_check
-touch $final_path/doku.php
+if [ "$upgrade_type" == "UPGRADE_APP" ]
+then
+    ynh_script_progression --message="Upgrading dokuwiki..." --weight=7
 
-# Remove files not used anymore after upgrade
-# See https://www.dokuwiki.org/install:unused_files
-if [ -f "$final_path/data/deleted.files" ]; then
+    # Remove upgrade notification inside Dokuwiki's admin panel
+    # See https://www.dokuwiki.org/update_check
+    touch $final_path/doku.php
 
-	# Use a "sub process" to start a new shell to run these commands
-	# Allow to use only one "cd" and to be more efficent
-	(
-		# Move to the dokuwiki installation folder so the "official" commands can be used without adaptation
-		cd $final_path
+    # Remove files not used anymore after upgrade
+    # See https://www.dokuwiki.org/install:unused_files
+    if [ -f "$final_path/data/deleted.files" ]; then
 
-		grep --extended-regexp --invert-match '^($|#)' data/deleted.files | xargs --max-args=1 rm --force --dir || true
-	)
+        # Use a "sub process" to start a new shell to run these commands
+        # Allow to use only one "cd" and to be more efficent
+        (
+            # Move to the dokuwiki installation folder so the "official" commands can be used without adaptation
+            cd $final_path
+
+            grep --extended-regexp --invert-match '^($|#)' data/deleted.files | xargs --max-args=1 rm --force --dir || true
+        )
+    fi
+
+    # TODO Taken from old "upgrade" script. Should check if it is needed and what it does
+    # Update all plugins
+    for name_plugin in $(sudo -s cat $final_path/lib/plugins/*/plugin.info.txt | grep url | awk -F ':' '{print $3}');
+    do
+        # Get a official plugin for dokuwiki, not update a no-official
+        wget -nv --quiet "https://github.com/splitbrain/dokuwiki-plugin-$name_plugin/zipball/master" -O "${name_plugin}.zip" -o /dev/null || true
+        if [ -s "${name_plugin}.zip" ]; then
+            unzip ${name_plugin}.zip
+            cp -a splitbrain-dokuwiki-plugin-${name_plugin}*/. "$final_path/lib/plugins/$name_plugin/"
+        fi
+    done
 fi
-
-# TODO Taken from old "upgrade" script. Should check if it is needed and what it does
-# Update all plugins
-for name_plugin in $(sudo -s cat $final_path/lib/plugins/*/plugin.info.txt | grep url | awk -F ':' '{print $3}');
-do
-	# Get a official plugin for dokuwiki, not update a no-official
-	sudo wget -nv --quiet "https://github.com/splitbrain/dokuwiki-plugin-${name_plugin}/zipball/master" -O "${name_plugin}.zip" -o /dev/null || true
-	if [ -s "${name_plugin}.zip" ]; then
-		sudo unzip ${name_plugin}.zip
-		sudo cp -a splitbrain-dokuwiki-plugin-${name_plugin}*/. "${final_path}/lib/plugins/${name_plugin}/"
-	fi
-done
 
 #=================================================
 # LDAP Configuration
@@ -242,7 +270,7 @@ done
 
 ### Verify the checksum of a file, stored by `ynh_store_file_checksum` in the install script.
 ### And create a backup of this file if the checksum is different. So the file will be backed up if the admin had modified it.
-ynh_backup_if_checksum_is_different "$final_path/conf/local.protected.php"
+ynh_backup_if_checksum_is_different --file="$final_path/conf/local.protected.php"
 
 # Always overwrite local file with the one from package.
 cp ../conf/local.protected.php $final_path/conf
@@ -250,10 +278,10 @@ cp ../conf/local.protected.php $final_path/conf
 # Set the authentification backend
 ynh_replace_string "__YNH_AUTH_BACKEND__" "$auth_backend" "$final_path/conf/local.protected.php"
 # Set the "admin" user
-ynh_replace_string "__YNH_ADMIN_USER__"   "$admin"        "$final_path/conf/local.protected.php"
+ynh_replace_string --match_string="__YNH_ADMIN_USER__" --replace_string="$admin" --target_file="$final_path/conf/local.protected.php"
 
 # Recalculate and store the checksum of the file for the next upgrade.
-ynh_store_file_checksum "$final_path/conf/local.protected.php"
+ynh_store_file_checksum --file="$final_path/conf/local.protected.php"
 
 #=================================================
 # GENERIC FINALIZATION
@@ -301,28 +329,28 @@ find $final_path/lib -type d -print0 | xargs -0 chmod 0755
 #=================================================
 # SETUP SSOWAT
 #=================================================
-ynh_print_info "Upgrading SSOwat configuration..."
+ynh_script_progression --message="Upgrading SSOwat configuration..."
 
 if [ $is_public -eq 0 ]
 then	# Remove the public access
-	ynh_app_setting_delete $app skipped_uris
+	ynh_app_setting_delete --app=$app --key=skipped_uris
 fi
 # Make app public if necessary
 if [ $is_public -eq 1 ]
 then
 	# unprotected_uris allows SSO credentials to be passed anyway
-	ynh_app_setting_set $app unprotected_uris "/"
+	ynh_app_setting_set --app=$app --key=unprotected_uris --value="/"
 fi
 
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_print_info "Reloading nginx web server..."
+ynh_script_progression --message="Reloading nginx web server..."
 
-systemctl reload nginx
+ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_print_info "Upgrade of $app completed"
+ynh_script_progression --message="Upgrade of $app completed" --last

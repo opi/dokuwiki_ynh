@@ -38,9 +38,9 @@ DokuWiki is a simple to use and highly versatile Open Source wiki software that 
 
 ### Supported architectures
 
-* x86-64b - [![Build Status](https://ci-apps.yunohost.org/ci/logs/dokuwiki%20%28Official%29.svg)](https://ci-apps.yunohost.org/ci/apps/dokuwiki/)
-* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/dokuwiki%20%28Official%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/dokuwiki/)
-* Jessie x86-64b - [![Build Status](https://ci-stretch.nohost.me/ci/logs/dokuwiki%20%28Official%29.svg)](https://ci-stretch.nohost.me/ci/apps/dokuwiki/)
+* x86-64b - [![Build Status](https://ci-apps.yunohost.org/ci/logs/dokuwiki%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/dokuwiki/)
+* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/dokuwiki%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/dokuwiki/)
+* Jessie x86-64b - [![Build Status](https://ci-stretch.nohost.me/ci/logs/dokuwiki%20%28Apps%29.svg)](https://ci-stretch.nohost.me/ci/apps/dokuwiki/)
 
 ## Limitations
 
@@ -58,6 +58,7 @@ DokuWiki is a simple to use and highly versatile Open Source wiki software that 
 
  * Report a bug: https://github.com/YunoHost-Apps/dokuwiki_ynh/issues
  * App website: https://www.dokuwiki.org
+ * Upstream app repository: https://github.com/splitbrain/dokuwiki
  * YunoHost website: https://yunohost.org
 
 ---
