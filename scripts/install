@@ -51,6 +51,30 @@ ynh_app_setting_set --app=$app --key=is_public --value=$is_public
 ynh_app_setting_set --app=$app --key=language --value=$language
 
 #=================================================
+# STORE DEFAULT VALUES FOR "ACTION SCRIPTS"
+#=================================================
+
+# Needed for "upgrade" to know which backend to set back after overwriting "local.protected.php"
+# Can be changed by action script "internal_users"
+auth_backend='authldap'   # Default backend is LDAP with Yunohost, 'authldap' for DokuWiki
+ynh_app_setting_set $app auth_backend $auth_backend
+
+# Force disable the 'is_internal_users' feature
+ynh_app_setting_set $app is_internal_users 0
+
+#=================================================
+# STORE DEFAULT VALUES FOR "ACTION SCRIPTS"
+#=================================================
+
+# Needed for "upgrade" to know which backend to set back after overwriting "local.protected.php"
+# Can be changed by action script "internal_users"
+auth_backend='authldap'   # Default backend is LDAP with Yunohost, 'authldap' for DokuWiki
+ynh_app_setting_set $app auth_backend $auth_backend
+
+# Force disable the 'is_internal_users' feature
+ynh_app_setting_set $app is_internal_users 0
+
+#=================================================
 # STANDARD MODIFICATIONS
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -108,13 +132,15 @@ ynh_script_progression --message="Configuring dokuwiki..." --weight=2
 # It will only be updated by Yunohost package or directly by adventurous users
 cp ../conf/local.protected.php $final_path/conf
 
+# Set the authentification backend
+ynh_replace_string "__YNH_AUTH_BACKEND__" "$auth_backend" "$final_path/conf/local.protected.php"
 # Set the "admin" user
 ynh_replace_string --match_string="__YNH_ADMIN_USER__" --replace_string="$admin"    --target_file="$final_path/conf/local.protected.php"
 
 
 # This file might be modified by dokuwiki admin panel or by plugins
 # It will not be modified by Yunohost in order to keep user settings
-cp ../conf/local.php           $final_path/conf
+cp ../conf/local.php $final_path/conf
 
 # Set the "language"
 ynh_replace_string --match_string="__YNH_LANGUAGE__"   --replace_string="$language" --target_file="$final_path/conf/local.php"
@@ -123,7 +149,7 @@ ynh_replace_string --match_string="__YNH_LANGUAGE__"   --replace_string="$langua
 # Restrict user rights by enforcing "read-only" mode for all users
 # See https://www.dokuwiki.org/acl#background_info
 # Default is "8"
-cp ../conf/acl.auth.php        $final_path/conf
+cp ../conf/acl.auth.php $final_path/conf
 
 #=================================================
 # CREATE DEFAULT FILES

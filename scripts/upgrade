@@ -28,6 +28,12 @@ final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 
 upgrade_type=$(ynh_check_app_version_changed)
 
+auth_backend=$(ynh_app_setting_get $app auth_backend)
+is_internal_users=$(ynh_app_setting_get $app is_internal_users)
+
+auth_backend=$(ynh_app_setting_get $app auth_backend)
+is_internal_users=$(ynh_app_setting_get $app is_internal_users)
+
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
@@ -59,6 +65,28 @@ fi
 if [ -z "$language" ]; then
 	language='en'
 	ynh_app_setting_set --app=$app --key=language --value=$language
+fi
+
+# 'auth_backend' default value, if not set
+if [ -z "$auth_backend" ]; then
+	auth_backend='authldap'
+	ynh_app_setting_set $app auth_backend $authldap
+fi
+
+# 'is_internal_users' default value, if not set
+if [ -z "$is_internal_users" ]; then
+	ynh_app_setting_set $app is_internal_users 0
+fi
+
+# 'auth_backend' default value, if not set
+if [ -z "$auth_backend" ]; then
+	auth_backend='authldap'
+	ynh_app_setting_set $app auth_backend $authldap
+fi
+
+# 'is_internal_users' default value, if not set
+if [ -z "$is_internal_users" ]; then
+	ynh_app_setting_set $app is_internal_users 0
 fi
 
 
@@ -247,6 +275,8 @@ ynh_backup_if_checksum_is_different --file="$final_path/conf/local.protected.php
 # Always overwrite local file with the one from package.
 cp ../conf/local.protected.php $final_path/conf
 
+# Set the authentification backend
+ynh_replace_string "__YNH_AUTH_BACKEND__" "$auth_backend" "$final_path/conf/local.protected.php"
 # Set the "admin" user
 ynh_replace_string --match_string="__YNH_ADMIN_USER__" --replace_string="$admin" --target_file="$final_path/conf/local.protected.php"
 
