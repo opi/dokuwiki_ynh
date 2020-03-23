@@ -26,8 +26,8 @@ DokuWiki is a simple to use and highly versatile Open Source wiki software that 
 
 ## Documentation
 
-* Official documentation: https://www.dokuwiki.org/manual
-* YunoHost documentation: https://yunohost.org/#/app_dokuwiki
+* Official documentation: <https://www.dokuwiki.org/manual>
+* YunoHost documentation: <https://yunohost.org/#/app_dokuwiki>
 
 ## YunoHost specific features
 
@@ -47,10 +47,10 @@ DokuWiki is a simple to use and highly versatile Open Source wiki software that 
 
 ## Links
 
- * Report a bug: https://github.com/YunoHost-Apps/dokuwiki_ynh/issues
- * App website: https://www.dokuwiki.org
- * Upstream app repository: https://github.com/splitbrain/dokuwiki
- * YunoHost website: https://yunohost.org
+* Report a bug: <https://github.com/YunoHost-Apps/dokuwiki_ynh/issues>
+* App website: <https://www.dokuwiki.org>
+* Upstream app repository: <https://github.com/splitbrain/dokuwiki>
+* YunoHost website: <https://yunohost.org>
 
 ---
 
@@ -61,7 +61,8 @@ DokuWiki is a simple to use and highly versatile Open Source wiki software that 
 Instead of merging directly into `master`, please do your pull request to the [`testing` branch](https://github.com/YunoHost-Apps/dokuwiki_ynh/tree/testing)
 
 To try the `testing` branch, please proceed like that.
-```
+
+```bash
 sudo yunohost app install https://github.com/YunoHost-Apps/dokuwiki_ynh/tree/testing --debug
 or
 sudo yunohost app upgrade dokuwiki -u https://github.com/YunoHost-Apps/dokuwiki_ynh/tree/testing --debug
