@@ -40,7 +40,6 @@ DokuWiki est un logiciel wiki Open Source simple à utiliser et très polyvalent
 
 * x86-64b - [![Build Status](https://ci-apps.yunohost.org/ci/logs/dokuwiki%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/dokuwiki/)
 * ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/dokuwiki%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/dokuwiki/)
-* Jessie x86-64b - [![Build Status](https://ci-stretch.nohost.me/ci/logs/dokuwiki%20%28Apps%29.svg)](https://ci-stretch.nohost.me/ci/apps/dokuwiki/)
 
 ## Limitations
 
