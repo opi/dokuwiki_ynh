@@ -45,14 +45,6 @@ DokuWiki est un logiciel wiki Open Source simple à utiliser et très polyvalent
 
 * Impossible d'ajouter et d'utiliser les utilisateurs internes de DokuWiki, seulement ceux de Yunohost (travail nécessaire pour [authchained plugin](https://www.dokuwiki.org/plugin:authchained))
 
-## Informations additionnelles
-
-### Historique des versions
-
-* *Many missing - List taken from previous documentation*
-* 07 Mar 2017 - Update app
-* 11 Feb 2017 - Create script app
-
 ## Liens
 
  * Signaler un bug: https://github.com/YunoHost-Apps/dokuwiki_ynh/issues

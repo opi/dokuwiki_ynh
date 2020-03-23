@@ -45,14 +45,6 @@ DokuWiki is a simple to use and highly versatile Open Source wiki software that 
 
 * Cannot create or login with dokuwiki internal users, only users from Yunohost (Work needed for [authchained plugin](https://www.dokuwiki.org/plugin:authchained))
 
-## Additional information
-
-### Changelog
-
-* *Many missing - List taken from previous documentation*
-* 07 Mar 2017 - Update app
-* 11 Feb 2017 - Create script app
-
 ## Links
 
  * Report a bug: https://github.com/YunoHost-Apps/dokuwiki_ynh/issues
