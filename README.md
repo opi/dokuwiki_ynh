@@ -16,7 +16,7 @@ DokuWiki is a simple to use and highly versatile Open Source wiki software that 
 
 ## Screenshots
 
-![](https://www.dokuwiki.org/_media/dokuwikimainwindow.png)
+![Screenshot of DokuWiki main window](dokuwikimainwindow.png)
 
 ## Demo
 
