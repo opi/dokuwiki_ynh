@@ -1,6 +1,6 @@
-SOURCE_URL=https://download.dokuwiki.org/src/dokuwiki/dokuwiki-2018-04-22a.tgz
-SOURCE_SUM=18765a29508f96f9882349a304bffc03
-SOURCE_SUM_PRG=md5sum
+SOURCE_URL=https://download.dokuwiki.org/src/dokuwiki/dokuwiki-2018-04-22b.tgz
+SOURCE_SUM=9d1437cdc7e98e471ff32079f7ca224ccf52dbbaafed39ec9746b0405b3a29ce
+SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=true
 SOURCE_FILENAME=
