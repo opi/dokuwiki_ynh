@@ -3,11 +3,11 @@
     "id": "dokuwiki",
     "packaging_format": 1,
     "description": {
-        "en": "DokuWiki is a simple to use and highly versatile Open Source wiki software that doesn't require a database.",
-        "fr": "DokuWiki est un wiki Open Source simple à utiliser et très polyvalent qui n'exige aucune base de données.",
-        "de": "DokuWiki ist ein standardkonformes, einfach zu benutzendes Wiki und zielt hauptsächlich auf die Erstellung von Dokumentationen aller Art ab.",
-        "es": "DokuWiki es un sistema de Wiki de uso sencillicimo y compatible con los estándares.",
-        "it": "DokuWiki è un Wiki aderente agli standard, semplice da usare, finalizzato principalmente alla creazione di documentazione di qualsiasi tipo."
+        "en": "A lightweight, simple to use and highly versatile wiki",
+        "fr": "Un wiki léger, simple à utiliser et très polyvalent",
+        "de": "Ein standardkonformes, einfach zu benutzendes Wiki und zielt hauptsächlich auf die Erstellung von Dokumentationen aller Art ab.",
+        "es": "Un sistema de Wiki de uso sencillicimo y compatible con los estándares.",
+        "it": "Un Wiki aderente agli standard, semplice da usare, finalizzato principalmente alla creazione di documentazione di qualsiasi tipo."
     },
     "version": "2018-04-22a~ynh3",
     "url": "https://www.dokuwiki.org",
