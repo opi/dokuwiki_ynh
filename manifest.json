@@ -22,7 +22,7 @@
         "email": "opi@zeropi.net"
     }],
     "requirements": {
-        "yunohost": ">= 3.5.0"
+        "yunohost": ">= 3.8.1"
     },
     "multi_instance": true,
     "services": [
