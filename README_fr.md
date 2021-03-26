@@ -27,7 +27,7 @@ DokuWiki est un logiciel wiki Open Source simple à utiliser et très polyvalent
 ## Documentation
 
 * Documentation officielle : https://www.dokuwiki.org/manual
-* Documentation YunoHost : https://yunohost.org/#/app_dokuwiki
+* Documentation YunoHost : https://yunohost.org/fr/app_dokuwiki
 
 ## Caractéristiques spécifiques YunoHost
 

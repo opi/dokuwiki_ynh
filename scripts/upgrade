@@ -44,7 +44,6 @@ if [ -z "$language" ]; then
 	ynh_app_setting_set --app=$app --key=language --value=$language
 fi
 
-
 # Cleaning legacy permissions
 admin_user=$(ynh_app_setting_get --app=$app --key=admin)
 
